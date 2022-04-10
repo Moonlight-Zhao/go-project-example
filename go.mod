@@ -3,7 +3,7 @@ module github.com/Moonlight-Zhao/go-project-example
 go 1.16
 
 require (
-	bou.ke/monkey v1.0.2 // indirect
+	bou.ke/monkey v1.0.2
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.3.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
@@ -13,7 +13,7 @@ require (
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
-	github.com/stretchr/testify v1.7.1 // indirect
+	github.com/stretchr/testify v1.7.1
 	github.com/ugorji/go v1.2.7 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
