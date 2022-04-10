@@ -13,9 +13,6 @@ func main() {
 		os.Exit(-1)
 	}
 	r := gin.Default()
-
-	r.Use(gin.Logger())
-
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
