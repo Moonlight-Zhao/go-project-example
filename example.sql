@@ -14,8 +14,8 @@ CREATE TABLE `user`
   DEFAULT CHARSET = utf8mb4 COMMENT ='用户表';
 
 INSERT INTO `user`
-VALUES (1, 'Jerry', '', 1, '2022-04-01 10:00:00', '2022-04-01 10:00:00'),
-       (2, 'Tom', '', 2, '2022-04-01 10:00:00', '2022-04-01 10:00:00');
+VALUES (1, 'Jerry', 'https://github.com/Moonlight-Zhao/go-project-example/blob/main/avatar.jpg', 1,'2022-04-01 10:00:00', '2022-04-01 10:00:00'),
+       (2, 'Tom', 'https://github.com/Moonlight-Zhao/go-project-example/blob/main/avatar.jpg', 2, '2022-04-01 10:00:00', '2022-04-01 10:00:00');
 
 DROP TABLE IF EXISTS `topic`;
 CREATE TABLE `topic`
