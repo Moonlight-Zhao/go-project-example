@@ -1,9 +1,12 @@
 package service
 
 import (
+	"bou.ke/monkey"
 	"github.com/Moonlight-Zhao/go-project-example/repository"
 	"github.com/Moonlight-Zhao/go-project-example/util"
+	"github.com/stretchr/testify/assert"
 	"os"
+	"reflect"
 	"testing"
 )
 
@@ -48,4 +51,15 @@ func TestPublishPost(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestPublishPostMockDao(t *testing.T) {
+	var postDao *repository.PostDao
+	monkey.PatchInstanceMethod(reflect.TypeOf(postDao), "CreatePost", func(_ *repository.PostDao, post *repository.Post) error {
+		post.Id = 100
+		return nil
+	})
+	defer monkey.UnpatchInstanceMethod(reflect.TypeOf(postDao), "CreatePost")
+	do, _ := NewPublishPostFlow(1, 2, "mock测试").Do()
+	assert.Equal(t, do, int64(100))
 }
