@@ -65,12 +65,12 @@ func (f *QueryPageInfoFlow) prepareInfo() error {
 	//获取topic信息
 	var wg sync.WaitGroup
 	wg.Add(2)
-	var topicErr, postErr error
+	errChan := make(chan error, 2)
 	go func() {
 		defer wg.Done()
 		topic, err := repository.NewTopicDaoInstance().QueryTopicById(f.topicId)
 		if err != nil {
-			topicErr = err
+			errChan <- err
 			return
 		}
 		f.topic = topic
@@ -80,17 +80,16 @@ func (f *QueryPageInfoFlow) prepareInfo() error {
 		defer wg.Done()
 		posts, err := repository.NewPostDaoInstance().QueryPostByParentId(f.topicId)
 		if err != nil {
-			postErr = err
+			errChan <- err
 			return
 		}
 		f.posts = posts
 	}()
 	wg.Wait()
-	if topicErr != nil {
-		return topicErr
-	}
-	if postErr != nil {
-		return postErr
+	select {
+	case err := <-errChan:
+		return err
+	default:
 	}
 	//获取用户信息
 	uids := []int64{f.topic.Id}
