@@ -2,21 +2,21 @@ package concurrence
 
 import (
 	"fmt"
-	"sync"
+	"time"
 )
 
 func hello(i int) {
-	println("hello world : " + fmt.Sprint(i))
+	println("hello goroutine : " + fmt.Sprint(i))
 }
 
-func ManyGo() {
-	var wg sync.WaitGroup
+func HelloGoRoutine() {
 	for i := 0; i < 5; i++ {
-		wg.Add(1)
 		go func(j int) {
-			defer wg.Done()
 			hello(j)
 		}(i)
 	}
-	wg.Wait()
+	time.Sleep(time.Second)
 }
+
+
+
