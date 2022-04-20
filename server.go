@@ -1,35 +1,20 @@
 package main
 
 import (
-	"github.com/Moonlight-Zhao/go-project-example/handler"
+	"github.com/Moonlight-Zhao/go-project-example/cotroller"
 	"github.com/Moonlight-Zhao/go-project-example/repository"
-	"github.com/Moonlight-Zhao/go-project-example/util"
 	"gopkg.in/gin-gonic/gin.v1"
 	"os"
 )
 
 func main() {
-	if err := Init(); err != nil {
+	if err := Init("./data/"); err != nil {
 		os.Exit(-1)
 	}
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
 	r.GET("/community/page/get/:id", func(c *gin.Context) {
 		topicId := c.Param("id")
-		data := handler.QueryPageInfo(topicId)
-		c.JSON(200, data)
-	})
-
-	r.POST("/community/post/do", func(c *gin.Context) {
-		uid, _ := c.GetPostForm("uid")
-		topicId, _ := c.GetPostForm("topic_id")
-		content, _ := c.GetPostForm("content")
-		data := handler.PublishPost(uid, topicId, content)
+		data := cotroller.QueryPageInfo(topicId)
 		c.JSON(200, data)
 	})
 	err := r.Run()
@@ -38,11 +23,8 @@ func main() {
 	}
 }
 
-func Init() error {
-	if err := repository.Init(); err != nil {
-		return err
-	}
-	if err := util.InitLogger(); err != nil {
+func Init(filePath string) error {
+	if err := repository.Init(filePath); err != nil {
 		return err
 	}
 	return nil

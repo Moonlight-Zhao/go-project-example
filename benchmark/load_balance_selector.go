@@ -9,14 +9,14 @@ var ServerIndex [10]int
 
 func InitServerIndex() {
 	for i := 0; i < 10; i++ {
-		ServerIndex[i] = i
+		ServerIndex[i] = i+100
 	}
 }
 
 func Select() int {
-	return rand.Intn(10)
+	return ServerIndex[rand.Intn(10)]
 }
 
 func FastSelect() int {
-	return fastrand.Intn(10)
+	return ServerIndex[fastrand.Intn(10)]
 }

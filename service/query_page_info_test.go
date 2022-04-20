@@ -1,33 +1,18 @@
 package service
 
 import (
+	"github.com/Moonlight-Zhao/go-project-example/repository"
+	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
 
+func TestMain(m *testing.M) {
+	repository.Init("../data/")
+	os.Exit(m.Run())
+}
 func TestQueryPageInfo(t *testing.T) {
-	type args struct {
-		topicId int64
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		{
-			name: "查询页面",
-			args: args{
-				topicId: 1,
-			},
-			wantErr: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			_, err := QueryPageInfo(tt.args.topicId)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("QueryPageInfo() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-		})
-	}
+	pageInfo, _ := QueryPageInfo(1)
+	assert.NotEqual(t, nil, pageInfo)
+	assert.Equal(t, 5, len(pageInfo.PostList))
 }

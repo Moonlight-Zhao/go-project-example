@@ -2,7 +2,5 @@ package test
 
 
 func HelloTom() string {
-	return "Jerry"
+	return "Tom"
 }
-
-func return

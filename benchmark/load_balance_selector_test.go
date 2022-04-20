@@ -14,7 +14,6 @@ func BenchmarkSelect(b *testing.B) {
 func BenchmarkSelectParallel(b *testing.B) {
 	InitServerIndex()
 	b.ResetTimer()
-	//b.SetParallelism(20)
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
 			Select()

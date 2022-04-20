@@ -1,15 +1,53 @@
 package repository
 
 import (
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+	"bufio"
+	"encoding/json"
+	"os"
 )
 
-var db *gorm.DB
+var (
+	topicIndexMap map[int64]*Topic
+	postIndexMap  map[int64][]*Post
+)
 
-func Init() error {
-	var err error
-	dsn := "root:00000000@tcp(127.0.0.1:3306)/community?charset=utf8mb4&parseTime=True&loc=Local"
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	return err
+func Init(filePath string) error {
+	open, err := os.Open(filePath + "topic")
+	if err != nil {
+		return err
+	}
+	scanner := bufio.NewScanner(open)
+	topicTmpMap := make(map[int64]*Topic)
+	for scanner.Scan() {
+		text := scanner.Text()
+		var topic Topic
+		if err := json.Unmarshal([]byte(text), &topic); err != nil {
+			return err
+		}
+		topicTmpMap[topic.Id] = &topic
+	}
+	topicIndexMap = topicTmpMap
+
+	open, err = os.Open(filePath + "post")
+	if err != nil {
+		return err
+	}
+	scanner = bufio.NewScanner(open)
+	postTmpMap := make(map[int64][]*Post)
+	for scanner.Scan() {
+		text := scanner.Text()
+		var post Post
+		if err := json.Unmarshal([]byte(text), &post); err != nil {
+			return err
+		}
+		posts, ok := postTmpMap[post.ParentId]
+		if !ok {
+			postTmpMap[post.ParentId] = []*Post{&post}
+			continue
+		}
+		posts = append(posts, &post)
+		postTmpMap[post.ParentId] = posts
+	}
+	postIndexMap = postTmpMap
+	return nil
 }

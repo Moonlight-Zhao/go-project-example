@@ -2,24 +2,13 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"github.com/Moonlight-Zhao/go-project-example/repository"
 	"sync"
 )
 
-type TopicInfo struct {
-	Topic *repository.Topic
-	User  *repository.User
-}
-
-type PostInfo struct {
-	Post *repository.Post
-	User *repository.User
-}
-
 type PageInfo struct {
-	TopicInfo *TopicInfo
-	PostList  []*PostInfo
+	Topic    *repository.Topic
+	PostList []*repository.Post
 }
 
 func QueryPageInfo(topicId int64) (*PageInfo, error) {
@@ -38,7 +27,6 @@ type QueryPageInfoFlow struct {
 
 	topic   *repository.Topic
 	posts   []*repository.Post
-	userMap map[int64]*repository.User
 }
 
 func (f *QueryPageInfoFlow) Do() (*PageInfo, error) {
@@ -65,70 +53,25 @@ func (f *QueryPageInfoFlow) prepareInfo() error {
 	//获取topic信息
 	var wg sync.WaitGroup
 	wg.Add(2)
-	errChan := make(chan error, 2)
 	go func() {
 		defer wg.Done()
-		topic, err := repository.NewTopicDaoInstance().QueryTopicById(f.topicId)
-		if err != nil {
-			errChan <- err
-			return
-		}
+		topic := repository.NewTopicDaoInstance().QueryTopicById(f.topicId)
 		f.topic = topic
 	}()
 	//获取post列表
 	go func() {
 		defer wg.Done()
-		posts, err := repository.NewPostDaoInstance().QueryPostByParentId(f.topicId)
-		if err != nil {
-			errChan <- err
-			return
-		}
+		posts := repository.NewPostDaoInstance().QueryPostByParentId(f.topicId)
 		f.posts = posts
 	}()
 	wg.Wait()
-	select {
-	case err := <-errChan:
-		return err
-	default:
-	}
-	//获取用户信息
-	uids := []int64{f.topic.Id}
-	for _, post := range f.posts {
-		uids = append(uids, post.Id)
-	}
-	userMap, err := repository.NewUserDaoInstance().MQueryUserById(uids)
-	if err != nil {
-		return err
-	}
-	f.userMap = userMap
 	return nil
 }
 
 func (f *QueryPageInfoFlow) packPageInfo() error {
-	//topic info
-	userMap := f.userMap
-	topicUser, ok := userMap[f.topic.UserId]
-	if !ok {
-		return errors.New("has no topic user info")
-	}
-	//post list
-	postList := make([]*PostInfo, 0)
-	for _, post := range f.posts {
-		postUser, ok := userMap[post.UserId]
-		if !ok {
-			return errors.New("has no post user info for " + fmt.Sprint(post.UserId))
-		}
-		postList = append(postList, &PostInfo{
-			Post: post,
-			User: postUser,
-		})
-	}
 	f.pageInfo = &PageInfo{
-		TopicInfo: &TopicInfo{
-			Topic: f.topic,
-			User:  topicUser,
-		},
-		PostList: postList,
+		Topic:    f.topic,
+		PostList: f.posts,
 	}
 	return nil
 }
