@@ -10,13 +10,12 @@ type Post struct {
 	Content    string `json:"content"`
 	CreateTime int64  `json:"create_time"`
 }
-
 type PostDao struct {
 }
-
-var postDao *PostDao
-var postOnce sync.Once
-
+var (
+	postDao *PostDao
+	postOnce sync.Once
+)
 func NewPostDaoInstance() *PostDao {
 	postOnce.Do(
 		func() {
@@ -24,7 +23,6 @@ func NewPostDaoInstance() *PostDao {
 		})
 	return postDao
 }
-
-func (*PostDao) QueryPostByParentId(parentId int64) []*Post {
+func (*PostDao) QueryPostsByParentId(parentId int64) []*Post {
 	return postIndexMap[parentId]
 }

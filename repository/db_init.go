@@ -11,7 +11,17 @@ var (
 	postIndexMap  map[int64][]*Post
 )
 
-func Init(filePath string) error {
+func Init(filePath string) error{
+	if err := initTopicIndexMap(filePath);err!=nil{
+		return err
+	}
+	if err := initPostIndexMap(filePath);err!=nil{
+		return err
+	}
+	return nil
+}
+
+func initTopicIndexMap(filePath string) error {
 	open, err := os.Open(filePath + "topic")
 	if err != nil {
 		return err
@@ -27,12 +37,15 @@ func Init(filePath string) error {
 		topicTmpMap[topic.Id] = &topic
 	}
 	topicIndexMap = topicTmpMap
+	return nil
+}
 
-	open, err = os.Open(filePath + "post")
+func initPostIndexMap(filePath string) error{
+	open, err := os.Open(filePath + "post")
 	if err != nil {
 		return err
 	}
-	scanner = bufio.NewScanner(open)
+	scanner := bufio.NewScanner(open)
 	postTmpMap := make(map[int64][]*Post)
 	for scanner.Scan() {
 		text := scanner.Text()

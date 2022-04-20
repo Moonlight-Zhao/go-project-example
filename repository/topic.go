@@ -11,13 +11,12 @@ type Topic struct {
 	Content    string    `gorm:"column:content"`
 	CreateTime time.Time `gorm:"column:create_time"`
 }
-
 type TopicDao struct {
 }
-
-var topicDao *TopicDao
-var topicOnce sync.Once
-
+var (
+	topicDao *TopicDao
+	topicOnce sync.Once
+)
 func NewTopicDaoInstance() *TopicDao {
 	topicOnce.Do(
 		func() {
@@ -25,7 +24,6 @@ func NewTopicDaoInstance() *TopicDao {
 		})
 	return topicDao
 }
-
 func (*TopicDao) QueryTopicById(id int64) *Topic {
 	return topicIndexMap[id]
 }

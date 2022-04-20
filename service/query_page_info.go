@@ -61,7 +61,7 @@ func (f *QueryPageInfoFlow) prepareInfo() error {
 	//获取post列表
 	go func() {
 		defer wg.Done()
-		posts := repository.NewPostDaoInstance().QueryPostByParentId(f.topicId)
+		posts := repository.NewPostDaoInstance().QueryPostsByParentId(f.topicId)
 		f.posts = posts
 	}()
 	wg.Wait()

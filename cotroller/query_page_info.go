@@ -11,9 +11,7 @@ type PageData struct {
 	Msg  string      `json:"msg"`
 	Data interface{} `json:"data"`
 }
-
 func QueryPageInfo(topicIdStr string) *PageData {
-	//参数转换
 	topicId, err := strconv.ParseInt(topicIdStr, 10, 64)
 	if err != nil {
 		return &PageData{
@@ -21,7 +19,6 @@ func QueryPageInfo(topicIdStr string) *PageData {
 			Msg:  err.Error(),
 		}
 	}
-	//获取service层结果
 	pageInfo, err := service.QueryPageInfo(topicId)
 	if err != nil {
 		return &PageData{
