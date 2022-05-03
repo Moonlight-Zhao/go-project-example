@@ -6,15 +6,15 @@ import (
 )
 
 type Topic struct {
-	Id         int64     `gorm:"column:id"`
-	Title      string    `gorm:"column:title"`
-	Content    string    `gorm:"column:content"`
-	CreateTime time.Time `gorm:"column:create_time"`
+	Id         int64     `json:"id"`
+	Title      string    `json:"title"`
+	Content    string    `json:"content"`
+	CreateTime time.Time `json:"create_time"`
 }
 type TopicDao struct {
 }
 var (
-	topicDao *TopicDao
+	topicDao  *TopicDao
 	topicOnce sync.Once
 )
 func NewTopicDaoInstance() *TopicDao {

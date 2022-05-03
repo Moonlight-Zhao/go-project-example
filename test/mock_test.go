@@ -6,12 +6,12 @@ import (
 	"testing"
 )
 
-func TestReadFirstLine(t *testing.T) {
+func TestProcessFirstLine(t *testing.T) {
 	firstLine := ProcessFirstLine()
 	assert.Equal(t, "line00", firstLine)
 }
 
-func TestReadFirstLineWithMock(t *testing.T) {
+func TestProcessFirstLineWithMock(t *testing.T) {
 	monkey.Patch(ReadFirstLine, func() string {
 		return "line110"
 	})
