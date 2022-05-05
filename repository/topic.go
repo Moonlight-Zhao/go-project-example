@@ -2,21 +2,22 @@ package repository
 
 import (
 	"sync"
-	"time"
 )
 
 type Topic struct {
-	Id         int64     `json:"id"`
-	Title      string    `json:"title"`
-	Content    string    `json:"content"`
-	CreateTime time.Time `json:"create_time"`
+	Id         int64  `json:"id"`
+	Title      string `json:"title"`
+	Content    string `json:"content"`
+	CreateTime int64  `json:"create_time"`
 }
 type TopicDao struct {
 }
+
 var (
 	topicDao  *TopicDao
 	topicOnce sync.Once
 )
+
 func NewTopicDaoInstance() *TopicDao {
 	topicOnce.Do(
 		func() {

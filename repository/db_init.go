@@ -4,18 +4,20 @@ import (
 	"bufio"
 	"encoding/json"
 	"os"
+	"sync"
 )
 
 var (
 	topicIndexMap map[int64]*Topic
 	postIndexMap  map[int64][]*Post
+	rwMutex       sync.RWMutex
 )
 
-func Init(filePath string) error{
-	if err := initTopicIndexMap(filePath);err!=nil{
+func Init(filePath string) error {
+	if err := initTopicIndexMap(filePath); err != nil {
 		return err
 	}
-	if err := initPostIndexMap(filePath);err!=nil{
+	if err := initPostIndexMap(filePath); err != nil {
 		return err
 	}
 	return nil
@@ -40,7 +42,7 @@ func initTopicIndexMap(filePath string) error {
 	return nil
 }
 
-func initPostIndexMap(filePath string) error{
+func initPostIndexMap(filePath string) error {
 	open, err := os.Open(filePath + "post")
 	if err != nil {
 		return err
