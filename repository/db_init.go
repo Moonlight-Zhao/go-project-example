@@ -10,7 +10,7 @@ var (
 	topicIndexMap map[int64]*Topic
 	postIndexMap  map[int64][]*Post
 )
-
+//通过读取文件 来构建一个Topic map 和 一个Post map
 func Init(filePath string) error{
 	if err := initTopicIndexMap(filePath);err!=nil{
 		return err
