@@ -93,9 +93,9 @@ func (f *QueryPageInfoFlow) prepareInfo() error {
 		return postErr
 	}
 	//获取用户信息
-	uids := []int64{f.topic.Id}
+	uids := []int64{f.topic.UserId}
 	for _, post := range f.posts {
-		uids = append(uids, post.Id)
+		uids = append(uids, post.UserId)
 	}
 	userMap, err := repository.NewUserDaoInstance().MQueryUserById(uids)
 	if err != nil {
