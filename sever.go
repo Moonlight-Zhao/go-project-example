@@ -9,25 +9,27 @@ import (
 )
 
 func main() {
-	if err := Init(); err != nil {
+	if Init() != nil {
 		os.Exit(-1)
 	}
 	r := gin.Default()
-
-	r.Use(gin.Logger())
-
+	// gin.Default()默认添加了日志中间件
+	//r.Use(gin.Logger())
+	// 测试接口
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
 	})
 
+	// page信息获取接口
 	r.GET("/community/page/get/:id", func(c *gin.Context) {
 		topicId := c.Param("id")
 		data := handler.QueryPageInfo(topicId)
 		c.JSON(200, data)
 	})
 
+	// 新增post接口
 	r.POST("/community/post/do", func(c *gin.Context) {
 		uid, _ := c.GetPostForm("uid")
 		topicId, _ := c.GetPostForm("topic_id")
@@ -35,8 +37,7 @@ func main() {
 		data := handler.PublishPost(uid, topicId, content)
 		c.JSON(200, data)
 	})
-	err := r.Run()
-	if err != nil {
+	if r.Run() != nil {
 		return
 	}
 }

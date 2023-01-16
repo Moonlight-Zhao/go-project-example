@@ -24,7 +24,9 @@ type TopicDao struct {
 var topicDao *TopicDao
 var topicOnce sync.Once
 
+// topicDao初始化
 func NewTopicDaoInstance() *TopicDao {
+	// 只执行一次
 	topicOnce.Do(
 		func() {
 			topicDao = &TopicDao{}
