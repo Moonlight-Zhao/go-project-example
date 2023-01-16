@@ -37,6 +37,7 @@ func (f *PublishPostFlow) Do() (int64, error) {
 	return f.postId, nil
 }
 
+// 参数验证，需增加业务逻辑验证（判断用户是否存在，对应topic是否存在）
 func (f *PublishPostFlow) checkParam() error {
 	if f.userId <= 0 {
 		return errors.New("userId id must be larger than 0")
